@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "890750135951",
+    "project_id": "charan-flutter-product-a-b751c",
+    "storage_bucket": "charan-flutter-product-a-b751c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890750135951:android:0c0c77cb2f5050987a4afa",
+        "android_client_info": {
+          "package_name": "com.example.flutter_firebase_product_manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAw9ePNwXjXQYAmac3AmreGk_7zkEUU8I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
