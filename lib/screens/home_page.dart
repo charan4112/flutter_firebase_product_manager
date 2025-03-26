@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/product.dart';
 import '../services/product_service.dart';
 
@@ -12,19 +13,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ProductService _productService = ProductService();
   
-  // Controllers for search and filter functionality
+  // Controllers for search and filter.
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _minPriceController = TextEditingController();
   final TextEditingController _maxPriceController = TextEditingController();
-  
-  // This method gets the stream of products from the service and applies filtering.
+
+  // Returns a filtered stream of products based on search text and price range.
   Stream<List<Product>> getFilteredProducts() {
     return _productService.getProducts().map((products) {
       final searchText = _searchController.text.trim().toLowerCase();
       if (searchText.isNotEmpty) {
-        products = products
-            .where((p) => p.name.toLowerCase().contains(searchText))
-            .toList();
+        products = products.where((p) => p.name.toLowerCase().contains(searchText)).toList();
       }
       final minPrice = double.tryParse(_minPriceController.text);
       final maxPrice = double.tryParse(_maxPriceController.text);
@@ -38,11 +37,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
   
-  // Method to create or update a product using a modal bottom sheet.
+  // Displays a modal bottom sheet for creating or updating a product.
   Future<void> _createOrUpdate([Product? product]) async {
     final isUpdating = product != null;
-    final TextEditingController nameController = TextEditingController(text: isUpdating ? product.name : '');
-    final TextEditingController priceController = TextEditingController(text: isUpdating ? product.price.toString() : '');
+    final TextEditingController nameController =
+        TextEditingController(text: isUpdating ? product!.name : '');
+    final TextEditingController priceController =
+        TextEditingController(text: isUpdating ? product!.price.toString() : '');
     
     await showModalBottomSheet(
       isScrollControlled: true,
@@ -74,12 +75,11 @@ class _HomePageState extends State<HomePage> {
                 if (name.isNotEmpty && price != null) {
                   if (isUpdating) {
                     await _productService.updateProduct(
-                      Product(id: product.id, name: name, price: price)
+                      Product(id: product!.id, name: name, price: price),
                     );
                   } else {
-                    // Firestore auto-generates an ID, so we pass an empty string.
                     await _productService.addProduct(
-                      Product(id: '', name: name, price: price)
+                      Product(id: '', name: name, price: price),
                     );
                   }
                   Navigator.of(context).pop();
@@ -103,7 +103,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Product Manager')),
+      appBar: AppBar(
+        title: const Text('Product Manager'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+            },
+          )
+        ],
+      ),
       body: Column(
         children: [
           // Search & Filter UI
@@ -157,11 +167,11 @@ class _HomePageState extends State<HomePage> {
                       },
                     )
                   ],
-                ),
+                )
               ],
             ),
           ),
-          // Product List (real-time stream)
+          // Real-time product list.
           Expanded(
             child: StreamBuilder<List<Product>>(
               stream: getFilteredProducts(),

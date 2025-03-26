@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
+  
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -13,19 +13,20 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String _error = '';
-
+  
   Future<void> _signIn() async {
     try {
       await _auth.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
     } catch (e) {
       setState(() {
         _error = e.toString();
       });
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

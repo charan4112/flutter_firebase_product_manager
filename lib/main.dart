@@ -26,13 +26,13 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          // Waiting for auth state to load.
+          // Show a loading indicator while waiting for authentication.
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
           }
-          // If user is logged in, show HomePage; otherwise, show LoginPage.
+          // If the user is logged in, show HomePage; otherwise, show LoginPage.
           return snapshot.hasData ? const HomePage() : const LoginPage();
         },
       ),
