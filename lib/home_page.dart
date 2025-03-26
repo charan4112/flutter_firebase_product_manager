@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
     if (name.isNotEmpty) {
       query = query
           .where('name', isGreaterThanOrEqualTo: name)
-          .where('name', isLessThanOrEqualTo: name + '\uf8ff');
+          .where('name', isLessThanOrEqualTo: '$name\uf8ff');
     }
 
     if (minPrice != null) {

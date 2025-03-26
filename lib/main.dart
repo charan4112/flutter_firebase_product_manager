@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'screens/home_page.dart';
 import 'screens/login_page.dart';
+import 'services/messaging_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // Initialize Firebase Cloud Messaging.
+  await MessagingService().initialize();
   runApp(const MyApp());
 }
 
@@ -23,13 +26,13 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          // Waiting for auth state to load
+          // Waiting for auth state to load.
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );
           }
-          // If user is logged in, show HomePage; otherwise, show LoginPage
+          // If user is logged in, show HomePage; otherwise, show LoginPage.
           return snapshot.hasData ? const HomePage() : const LoginPage();
         },
       ),

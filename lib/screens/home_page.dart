@@ -41,8 +41,8 @@ class _HomePageState extends State<HomePage> {
   // Method to create or update a product using a modal bottom sheet.
   Future<void> _createOrUpdate([Product? product]) async {
     final isUpdating = product != null;
-    final TextEditingController nameController = TextEditingController(text: isUpdating ? product!.name : '');
-    final TextEditingController priceController = TextEditingController(text: isUpdating ? product!.price.toString() : '');
+    final TextEditingController nameController = TextEditingController(text: isUpdating ? product.name : '');
+    final TextEditingController priceController = TextEditingController(text: isUpdating ? product.price.toString() : '');
     
     await showModalBottomSheet(
       isScrollControlled: true,
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                 if (name.isNotEmpty && price != null) {
                   if (isUpdating) {
                     await _productService.updateProduct(
-                      Product(id: product!.id, name: name, price: price)
+                      Product(id: product.id, name: name, price: price)
                     );
                   } else {
                     // Firestore auto-generates an ID, so we pass an empty string.
